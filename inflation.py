@@ -10,9 +10,9 @@ def print_pools(userPool, validatorPool, communityPool, stakeholderPool):
 # total suppy   = 218,395tru
 # almost 10% tru staked
 
-userPool = 2000000.00         # 2,000,000tru
-validatorPool = 1000000.00    # 1,000,000tru
-communityPool = 1000000.00    # 1,000,000tru
+userPool        = 5000000.00  # 5,000,000tru
+validatorPool   = 1000000.00  # 1,000,000tru
+communityPool   = 1000000.00  # 1,000,000tru
 stakeholderPool = 1000000.00  # 1,000,000tru
 
 totalSupply = userPool + validatorPool + communityPool + stakeholderPool
@@ -36,8 +36,10 @@ print("inflation           : %.2f percent" % (inflationRate * 100))
 # userInterest = 1.05 #105%
 # valInterest = 1.05  #105%
 # variable interest based on inflation
-userInterest = inflationRate + (inflationRate * 0.75)
-valInterest = inflationRate + (inflationRate * 0.75)
+# userInterest = inflationRate + (inflationRate * 0.25)
+# valInterest = inflationRate + (inflationRate * 0.25)
+userInterest = inflationRate * 1.25
+valInterest = inflationRate * 1.25
 print("user interest       : %.2f percent" % (userInterest * 100))
 print("validator interest  : %.2f percent" % (valInterest * 100))
 
@@ -46,7 +48,7 @@ usersPerMonth = 250
 userOwned = usersPerMonth * 12 * initialGift
 totalUserOwned = 0.0
 
-totalValidatorStaked = validatorPool
+totalValidatorStaked = validatorPool * 1.0
 validatorPool = validatorPool - totalValidatorStaked
 totalSupply = userPool + validatorPool + communityPool + stakeholderPool
 print_pools(userPool, validatorPool, communityPool, stakeholderPool)
@@ -67,29 +69,25 @@ for year in range(0,10):
   userPool = userPool - userOwned
   totalUserOwned = totalUserOwned + userOwned
 
-  # validatorOwned = 
-
   # account for staking...
   # if 66% of new user funds are staked
   userStaked = userOwned * 0.66
   userStakedInterest = userStaked * userInterest
+
   userOwned = userOwned + userStakedInterest
-  totalUserOwned = totalUserOwned + userOwned
+  totalUserOwned = totalUserOwned + userStakedInterest
   userPool = userPool - userStakedInterest
-  # userOwned = userOwned + userStakedInterest
 
-  # if 66% validator funds are being staked
-  # valStaked = totalValidatorOwned * 0.66
-  # valStakedInterest = valStaked * valInterest
-  # validatorPool = validatorPool - valStakedInterest
-
+  # account for validator staking
   validatorInterest = totalValidatorStaked * valInterest
+  validatorPool = validatorPool - validatorInterest
 
   print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 
   # totalSupply = userPool + userOwned + validatorPool + communityPool + stakeholderPool
   totalSupply = userPool + userOwned + validatorPool + validatorInterest + communityPool + stakeholderPool
+  print("total supply: " + f'{totalSupply:,.2f}')
 
-  print("total user owned:      " + f'{totalUserOwned:,.2f}')
-  # print("total validator owned: " + f'{totalValidatorOwned:,.2f}')
+  print("total user owned: " + f'{totalUserOwned:,.2f}')
+  print("total validator owned: " + f'{totalValidatorStaked:,.2f}')
   print("")
