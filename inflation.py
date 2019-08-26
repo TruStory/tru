@@ -28,7 +28,7 @@ stakeholderAlloc = 0.2
 # b/c need leave adequate amount of token liquid for trade
 # cosmos inflation changes between 20% and 70% (high staking to low staking)
 # inflation goes from 20% (when nearly 66% staked) to 70% (when closer to 0% staked)
-inflationRate = 0.5 # because we have low staking (10%)
+inflationRate = 0.7 # because we have low staking (10%)
 print("inflation           : %.2f percent" % (inflationRate * 100))
 
 # play with these values
@@ -56,6 +56,7 @@ givenToUsersYearly = usersPerMonth * 12 * initialGift
 # inputs from other currencies (DAI, ETH, Atom, etc.)
 externalFunds = givenToUsersYearly * 2
 totalUserOwned = 0.0
+totalStakeholderOwned = 0.0
 
 totalValidatorStaked = validatorPool * 0.66
 validatorPool = validatorPool - totalValidatorStaked
@@ -63,7 +64,7 @@ totalSupply = userPool + validatorPool + communityPool + stakeholderPool
 print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 print("")
 
-for year in range(0,10):
+for year in range(0,5):
   annualProvision = inflationRate * totalSupply
   print("year %d" % (year +1))
   print("annual inflation: " + f'{annualProvision:,.2f}')
@@ -89,11 +90,15 @@ for year in range(0,10):
   validatorInterest = totalValidatorStaked * valInterest
   validatorPool = validatorPool - validatorInterest
 
+  # distribute funds to stakeholders
+  totalStakeholderOwned = totalStakeholderOwned + stakeholderPool
+  stakeholderPool = 0
+
   print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 
-  totalSupply = userPool + givenToUsersYearly + stakingInterest + validatorPool + validatorInterest + communityPool + stakeholderPool
-  # totalSupply = userPool + userOwned + validatorPool + validatorInterest + communityPool + stakeholderPool
-  print("total supply         : " + f'{totalSupply:,.2f}')
-  print("total user owned     : " + f'{totalUserOwned:,.2f}')
-  print("total validator owned: " + f'{totalValidatorStaked:,.2f}')
+  totalSupply = userPool + givenToUsersYearly + stakingInterest + validatorPool + validatorInterest + communityPool + stakeholderPool + totalStakeholderOwned
+  print("total supply           : " + f'{totalSupply:,.2f}')
+  print("total user owned       : " + f'{totalUserOwned:,.2f}')
+  print("total validator owned  : " + f'{totalValidatorStaked:,.2f}')
+  print("total stakeholder owned: " + f'{totalStakeholderOwned:,.2f}')
   print("")
