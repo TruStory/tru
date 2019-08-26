@@ -11,9 +11,9 @@ def print_pools(userPool, validatorPool, communityPool, stakeholderPool):
 # almost 10% tru staked
 
 userPool        = 5000000.00  # 5,000,000tru
-validatorPool   = 1000000.00  # 1,000,000tru
+validatorPool   = 2500000.00  # 1,000,000tru
 communityPool   = 1000000.00  # 1,000,000tru
-stakeholderPool = 1000000.00  # 1,000,000tru
+stakeholderPool = 0.00        # 0tru
 
 totalSupply = userPool + validatorPool + communityPool + stakeholderPool
 print_pools(userPool, validatorPool, communityPool, stakeholderPool)
@@ -28,7 +28,7 @@ stakeholderAlloc = 0.2
 # b/c need leave adequate amount of token liquid for trade
 # cosmos inflation changes between 20% and 70% (high staking to low staking)
 # inflation goes from 20% (when nearly 66% staked) to 70% (when closer to 0% staked)
-inflationRate = 0.6 # because we have low staking (10%)
+inflationRate = 0.2 # because we have low staking (10%)
 print("inflation           : %.2f percent" % (inflationRate * 100))
 
 # play with these values
@@ -38,17 +38,26 @@ print("inflation           : %.2f percent" % (inflationRate * 100))
 # variable interest based on inflation
 # userInterest = inflationRate + (inflationRate * 0.25)
 # valInterest = inflationRate + (inflationRate * 0.25)
-userInterest = inflationRate * 1.25
-valInterest = inflationRate * 1.25
+userInterest = inflationRate * 0.75
+valInterest = inflationRate * 0.75
 print("user interest       : %.2f percent" % (userInterest * 100))
 print("validator interest  : %.2f percent" % (valInterest * 100))
+
+agreeStake = 30.0
+argumentStake = 10.0
+period = 7
+milli = 1000
+agreeReward = (agreeStake * userInterest) * (7/365)
+print("agree reward   : %.2f tru, %.2f mtru" % (agreeReward, agreeReward * milli))
+argumentReward  = (argumentStake * userInterest) * (7/365)
+print("argument reward: %.2f tru, %.2f mtru" % (argumentReward, argumentReward * milli))
 
 initialGift = 300.0
 usersPerMonth = 250
 userOwned = usersPerMonth * 12 * initialGift
 totalUserOwned = 0.0
 
-totalValidatorStaked = validatorPool * 1.0
+totalValidatorStaked = validatorPool * 0.50
 validatorPool = validatorPool - totalValidatorStaked
 totalSupply = userPool + validatorPool + communityPool + stakeholderPool
 print_pools(userPool, validatorPool, communityPool, stakeholderPool)
@@ -73,7 +82,6 @@ for year in range(0,10):
   # if 66% of new user funds are staked
   userStaked = userOwned * 0.66
   userStakedInterest = userStaked * userInterest
-
   userOwned = userOwned + userStakedInterest
   totalUserOwned = totalUserOwned + userStakedInterest
   userPool = userPool - userStakedInterest
@@ -86,8 +94,7 @@ for year in range(0,10):
 
   # totalSupply = userPool + userOwned + validatorPool + communityPool + stakeholderPool
   totalSupply = userPool + userOwned + validatorPool + validatorInterest + communityPool + stakeholderPool
-  print("total supply: " + f'{totalSupply:,.2f}')
-
-  print("total user owned: " + f'{totalUserOwned:,.2f}')
+  print("total supply         : " + f'{totalSupply:,.2f}')
+  print("total user owned     : " + f'{totalUserOwned:,.2f}')
   print("total validator owned: " + f'{totalValidatorStaked:,.2f}')
   print("")
