@@ -11,7 +11,7 @@ def print_pools(userPool, validatorPool, communityPool, stakeholderPool):
 # almost 10% tru staked
 
 userPool        = 5000000.00  # 5,000,000tru
-validatorPool   = 2500000.00  # 1,000,000tru
+validatorPool   = 1000000.00  # 1,000,000tru
 communityPool   = 1000000.00  # 1,000,000tru
 stakeholderPool = 0.00        # 0tru
 
@@ -28,7 +28,7 @@ stakeholderAlloc = 0.2
 # b/c need leave adequate amount of token liquid for trade
 # cosmos inflation changes between 20% and 70% (high staking to low staking)
 # inflation goes from 20% (when nearly 66% staked) to 70% (when closer to 0% staked)
-inflationRate = 0.2 # because we have low staking (10%)
+inflationRate = 0.5 # because we have low staking (10%)
 print("inflation           : %.2f percent" % (inflationRate * 100))
 
 # play with these values
@@ -38,8 +38,8 @@ print("inflation           : %.2f percent" % (inflationRate * 100))
 # variable interest based on inflation
 # userInterest = inflationRate + (inflationRate * 0.25)
 # valInterest = inflationRate + (inflationRate * 0.25)
-userInterest = inflationRate * 0.75
-valInterest = inflationRate * 0.75
+userInterest = inflationRate * 1.05
+valInterest = inflationRate * 1.05
 print("user interest       : %.2f percent" % (userInterest * 100))
 print("validator interest  : %.2f percent" % (valInterest * 100))
 
@@ -57,7 +57,7 @@ usersPerMonth = 250
 userOwned = usersPerMonth * 12 * initialGift
 totalUserOwned = 0.0
 
-totalValidatorStaked = validatorPool * 0.50
+totalValidatorStaked = validatorPool * 0.66
 validatorPool = validatorPool - totalValidatorStaked
 totalSupply = userPool + validatorPool + communityPool + stakeholderPool
 print_pools(userPool, validatorPool, communityPool, stakeholderPool)
