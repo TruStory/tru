@@ -36,10 +36,8 @@ print("inflation           : %.2f percent" % (inflationRate * 100))
 # userInterest = 1.05 #105%
 # valInterest = 1.05  #105%
 # variable interest based on inflation
-# userInterest = inflationRate + (inflationRate * 0.25)
-# valInterest = inflationRate + (inflationRate * 0.25)
-userInterest = inflationRate * 1.05
-valInterest = inflationRate * 1.05
+userInterest = inflationRate * 0.75
+valInterest = inflationRate * 0.75
 print("user interest       : %.2f percent" % (userInterest * 100))
 print("validator interest  : %.2f percent" % (valInterest * 100))
 
@@ -54,7 +52,9 @@ print("argument reward: %.2f tru, %.2f mtru" % (argumentReward, argumentReward *
 
 initialGift = 300.0
 usersPerMonth = 250
-userOwned = usersPerMonth * 12 * initialGift
+givenToUsersYearly = usersPerMonth * 12 * initialGift
+# inputs from other currencies (DAI, ETH, Atom, etc.)
+externalFunds = givenToUsersYearly * 2
 totalUserOwned = 0.0
 
 totalValidatorStaked = validatorPool * 0.66
@@ -75,16 +75,15 @@ for year in range(0,10):
   stakeholderPool = stakeholderPool + (annualProvision * stakeholderAlloc)
   
   # account for new user gifts
-  userPool = userPool - userOwned
-  totalUserOwned = totalUserOwned + userOwned
+  userPool = userPool - givenToUsersYearly
+  totalUserOwned = totalUserOwned + givenToUsersYearly
 
-  # account for staking...
-  # if 66% of new user funds are staked
-  userStaked = userOwned * 0.66
-  userStakedInterest = userStaked * userInterest
-  userOwned = userOwned + userStakedInterest
-  totalUserOwned = totalUserOwned + userStakedInterest
-  userPool = userPool - userStakedInterest
+  # account for user staking...
+  # assume 1/2 of all given TRU and external inputs are staked
+  amountStaked = (givenToUsersYearly * 0.5) + (externalFunds * 0.5)
+  stakingInterest = amountStaked * userInterest * 5
+  # deduct staking interest from user pool
+  userPool = userPool - stakingInterest
 
   # account for validator staking
   validatorInterest = totalValidatorStaked * valInterest
@@ -92,8 +91,8 @@ for year in range(0,10):
 
   print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 
-  # totalSupply = userPool + userOwned + validatorPool + communityPool + stakeholderPool
-  totalSupply = userPool + userOwned + validatorPool + validatorInterest + communityPool + stakeholderPool
+  totalSupply = userPool + givenToUsersYearly + stakingInterest + validatorPool + validatorInterest + communityPool + stakeholderPool
+  # totalSupply = userPool + userOwned + validatorPool + validatorInterest + communityPool + stakeholderPool
   print("total supply         : " + f'{totalSupply:,.2f}')
   print("total user owned     : " + f'{totalUserOwned:,.2f}')
   print("total validator owned: " + f'{totalValidatorStaked:,.2f}')
