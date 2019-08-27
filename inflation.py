@@ -63,7 +63,7 @@ for year in range(0,5):
   validatorPool = validatorPool + (annualProvision * validatorAlloc)
   communityPool = communityPool + (annualProvision * communityAlloc)
   stakeholderPool = stakeholderPool + (annualProvision * stakeholderAlloc)
-  print_pools(userPool, validatorPool, communityPool, stakeholderPool)
+  # print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 
   # update total supply
   totalSupply = userPool + validatorPool + communityPool + stakeholderPool
@@ -85,7 +85,7 @@ for year in range(0,5):
   totalUserOwned = totalUserOwned + stakingTotal
 
   # account for validator staking (50% of validator pool is staked)
-  validatorStaked = validatorPool * 0.5
+  validatorStaked = validatorPool * 0.50
   print("validator staked  : " + f'{validatorStaked:,.2f}')
   validatorInterest = validatorStaked * valInterestRate
   print("validator interest: " + f'{validatorInterest:,.2f}')
