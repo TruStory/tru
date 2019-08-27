@@ -41,7 +41,7 @@ milli = 1000
 agreeReward = (agreeStake * userInterestRate) * (7/365)
 print("agree reward      : %.2f tru, %.2f mtru" % (agreeReward, agreeReward * milli))
 argumentReward  = (argumentStake * userInterestRate) * (7/365)
-print("argument reward   : %.2f tru, %.2f mtru" % (argumentReward, argumentReward * milli))
+print("argument reward   : %.2f tru, %.2f mtru\n" % (argumentReward, argumentReward * milli))
 
 initialGift = 300.0
 usersPerMonth = 250
@@ -51,7 +51,6 @@ externalFunds = givenToUsersYearly * 2
 
 totalUserOwned = 0.0
 totalValidatorOwned = 0.0
-print("")
 
 for year in range(0,5):
   annualProvision = inflationRate * totalSupply
@@ -70,8 +69,8 @@ for year in range(0,5):
   print("total supply      : " + f'{totalSupply:,.2f}')
  
   # account for new user gifts
-  userPool = userPool - givenToUsersYearly
-  totalUserOwned = totalUserOwned + givenToUsersYearly
+  userPool -= givenToUsersYearly
+  totalUserOwned += givenToUsersYearly
 
   # account for user staking...
   # assume 1/2 of all given TRU and external inputs are staked
@@ -81,8 +80,8 @@ for year in range(0,5):
   stakingInterest = totalAmountStaked * userInterestRate
   # deduct user  staking from user pool
   stakingTotal = amountTruStaked + stakingInterest
-  userPool = userPool - stakingTotal
-  totalUserOwned = totalUserOwned + stakingTotal
+  userPool -= stakingTotal
+  totalUserOwned += stakingTotal
 
   # account for validator staking (50% of validator pool is staked)
   validatorStaked = validatorPool * 0.50
@@ -90,11 +89,10 @@ for year in range(0,5):
   validatorInterest = validatorStaked * valInterestRate
   print("validator interest: " + f'{validatorInterest:,.2f}')
   validatorTotal = validatorStaked + validatorInterest
-  validatorPool = validatorPool - validatorTotal
-  totalValidatorOwned = totalValidatorOwned + validatorTotal
+  validatorPool -= validatorTotal
+  totalValidatorOwned += validatorTotal
 
   print_pools(userPool, validatorPool, communityPool, stakeholderPool)
 
   print("total user owned  : " + f'{totalUserOwned:,.2f}')
-  print("validator owned   : " + f'{totalValidatorOwned:,.2f}')
-  print("")
+  print("validator owned   : " + f'{totalValidatorOwned:,.2f}' + "\n")
